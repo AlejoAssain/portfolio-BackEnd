@@ -1,6 +1,6 @@
 package com.alejoassain.portfolioargprogbe.config;
 
-import com.alejoassain.portfolioargprogbe.user.UserRepository;
+import com.alejoassain.portfolioargprogbe.user.repository.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
