@@ -20,6 +20,6 @@ public class AboutMeController {
     ResponseEntity<AboutMeResponse> updateAboutMeData(
             @RequestBody AboutMeRequest requestBody
     ) {
-        return ResponseEntity.ok(amService.updateAboutMeData(requestBody));
+        return ResponseEntity.ok(amService.setAboutMeData(requestBody));
     }
 }

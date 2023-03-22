@@ -47,6 +47,7 @@ public class ExperienceService implements IExperienceService {
             }
 
             Experience experience = experienceBuilder.build();
+
             experienceRepository.save(experience);
 
             experiencesResponse.addExperienceResponse(ExperienceResponse.builder()
@@ -59,6 +60,8 @@ public class ExperienceService implements IExperienceService {
                     .companyImageLink(experience.getCompanyImageLink())
                     .build());
         }
+
+        experiencesResponse.sortExperiencesBySequence();
 
         return experiencesResponse;
     }

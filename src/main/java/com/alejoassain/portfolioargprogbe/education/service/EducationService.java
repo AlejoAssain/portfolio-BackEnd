@@ -18,6 +18,34 @@ public class EducationService implements IEducationService {
     @Autowired
     private EducationRepository educationRepository;
 
+    private EducationResponse buildResponse(Education education) {
+        return EducationResponse.builder()
+                .sequence(education.getId())
+                .institutionName(education.getInstitutionName())
+                .title(education.getTitle())
+                .yearTo(education.getYearTo())
+                .yearFrom(education.getYearFrom())
+                .institutionImageLink(education.getInstitutionImageLink())
+                .build();
+    }
+
+    @Override
+    public EducationsResponse getEducations() {
+        List<Education> educations = educationRepository.findAll();
+        EducationsResponse educationsResponse = EducationsResponse.builder()
+                .educations(new ArrayList<>())
+                .build();
+
+        for (int i = 0; i < educations.size(); i++) {
+            Education education = educations.get(i);
+            educationsResponse.addEducationResponse(this.buildResponse(education));
+        }
+
+        educationsResponse.sortEducationsBySequence();
+
+        return educationsResponse;
+    }
+
     @Override
     public EducationsResponse setEducations(EducationsRequest requestBody) {
         List<EducationRequest> educations = requestBody.getEducations();
@@ -47,14 +75,7 @@ public class EducationService implements IEducationService {
             Education education = educationBuilder.build();
             educationRepository.save(education);
 
-            educationsResponse.addEducationResponse(EducationResponse.builder()
-                    .sequence(i)
-                    .institutionName(education.getInstitutionName())
-                    .title(education.getTitle())
-                    .yearTo(education.getYearTo())
-                    .yearFrom(education.getYearFrom())
-                    .institutionImageLink(education.getInstitutionImageLink())
-                    .build());
+            educationsResponse.addEducationResponse(this.buildResponse(education));
         }
 
         return educationsResponse;

@@ -12,10 +12,7 @@ public class AboutMeService implements IAboutMeService{
     @Autowired
     private AboutMeRepository amRepository;
 
-    @Override
-    public AboutMeResponse getAboutMeData() {
-        AboutMe am = amRepository.findById(1).orElse(null);
-
+    private AboutMeResponse buildResponse(AboutMe am) {
         return AboutMeResponse.builder()
                 .text(am.getText())
                 .profilePicLink(am.getProfilePicLink())
@@ -24,7 +21,14 @@ public class AboutMeService implements IAboutMeService{
     }
 
     @Override
-    public AboutMeResponse updateAboutMeData(AboutMeRequest requestBody) {
+    public AboutMeResponse getAboutMeData() {
+        AboutMe am = amRepository.findById(1).orElse(null);
+
+        return this.buildResponse(am);
+    }
+
+    @Override
+    public AboutMeResponse setAboutMeData(AboutMeRequest requestBody) {
         AboutMe am = amRepository.findById(1).orElse(null);
 
         if (requestBody.getText() != null) {
@@ -41,10 +45,6 @@ public class AboutMeService implements IAboutMeService{
 
         amRepository.save(am);
 
-        return AboutMeResponse.builder()
-                .text(am.getText())
-                .profilePicLink(am.getProfilePicLink())
-                .profilePicCap(am.getProfilePicCap())
-                .build();
+        return this.buildResponse(am);
     }
 }
