@@ -40,6 +40,8 @@ public class AuthenticationService implements IAuthenticationService {
 
         return AuthenticationResponse
                 .builder()
+                .username(user.getUsername())
+                .name(user.getName())
                 .token(jwtToken)
                 .build();
     }
@@ -59,6 +61,8 @@ public class AuthenticationService implements IAuthenticationService {
 
         return AuthenticationResponse
                 .builder()
+                .username(user.getUsername())
+                .name(user.getName())
                 .token(jwtToken)
                 .build();
     }

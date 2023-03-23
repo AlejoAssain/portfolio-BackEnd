@@ -21,7 +21,7 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        // TODO - set up app security config
+        // FIXME - set up app security config
         return http
                 .csrf()
                 .disable()

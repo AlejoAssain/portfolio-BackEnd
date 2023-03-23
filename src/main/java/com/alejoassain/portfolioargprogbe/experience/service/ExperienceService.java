@@ -9,7 +9,6 @@ import com.alejoassain.portfolioargprogbe.experience.response.ExperiencesRespons
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.Year;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +17,37 @@ import java.util.List;
 public class ExperienceService implements IExperienceService {
     @Autowired
     private ExperienceRepository experienceRepository;
+
+    private ExperienceResponse buildResponse(Experience experience) {
+        return ExperienceResponse.builder()
+                .sequence(experience.getId())
+                .companyName(experience.getCompanyName())
+                .companyImageLink(experience.getCompanyImageLink())
+                .positionName(experience.getPositionName())
+                .positionInfo(experience.getPositionInfo())
+                .yearMonthFrom(experience.getYearMonthFrom())
+                .yearMonthTo(experience.getYearMonthTo())
+                .build();
+    }
+
+    @Override
+    public ExperiencesResponse getExperiences() {
+        List<Experience> experiences = experienceRepository.findAll();
+
+        ExperiencesResponse experiencesResponse = ExperiencesResponse.builder()
+                .experiences(new ArrayList<>())
+                .build();
+
+        for (int i = 0; i < experiences.size(); i++) {
+            Experience experience = experiences.get(i);
+
+            experiencesResponse.addExperienceResponse(this.buildResponse(experience));
+        }
+
+        experiencesResponse.sortExperiencesBySequence();
+
+        return experiencesResponse;
+    }
 
     @Override
     public ExperiencesResponse setExperiences(ExperiencesRequest requestBody) {

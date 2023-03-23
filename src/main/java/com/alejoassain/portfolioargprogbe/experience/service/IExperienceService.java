@@ -4,5 +4,7 @@ import com.alejoassain.portfolioargprogbe.experience.request.ExperiencesRequest;
 import com.alejoassain.portfolioargprogbe.experience.response.ExperiencesResponse;
 
 public interface IExperienceService {
+    ExperiencesResponse getExperiences();
+
     ExperiencesResponse setExperiences(ExperiencesRequest requestBody);
 }
