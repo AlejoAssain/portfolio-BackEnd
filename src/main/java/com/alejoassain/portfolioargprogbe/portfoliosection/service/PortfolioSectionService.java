@@ -17,6 +17,7 @@ import com.alejoassain.portfolioargprogbe.projects.service.IProjectService;
 import com.alejoassain.portfolioargprogbe.skills.response.SkillsResponse;
 import com.alejoassain.portfolioargprogbe.skills.service.ISkillService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -25,6 +26,8 @@ import java.util.Map;
 
 @Service
 public class PortfolioSectionService implements IPortfolioSectionService {
+    private final String[] requiredSectionNames = {"banner", "about-me", "skills", "education", "experience", "projects"};
+
     @Autowired
     private PortfolioSectionRepository psRepository;
 
@@ -98,6 +101,33 @@ public class PortfolioSectionService implements IPortfolioSectionService {
                 .build();
     }
 
+    private boolean checkSections(List<PortfolioSection> portfolioSections) {
+        for (String sectionName : this.requiredSectionNames) {
+            boolean containsSection =  portfolioSections.stream()
+                    .anyMatch(section -> section.getName().equalsIgnoreCase(sectionName));
+
+            if (!containsSection) {
+                return false;
+            }
+        }
+
+        return true;
+    };
+
+    private void generateDefaultSections() {
+        for (int i = 0; i < this.requiredSectionNames.length; i++) {
+            String sectionName = this.requiredSectionNames[i];
+
+            PortfolioSection newSection = PortfolioSection.builder()
+                    .id(i + 1)
+                    .name(sectionName)
+                    .title(sectionName)
+                    .subtitle("Example subtitle")
+                    .build();
+
+            psRepository.save(newSection);
+        }
+    }
 
     @Override
     public PortfolioSectionsResponse getPortfolioSections() {
@@ -143,5 +173,19 @@ public class PortfolioSectionService implements IPortfolioSectionService {
                 .title(ps.getTitle())
                 .subtitle(ps.getSubtitle())
                 .build();
+    }
+
+    @Override
+    public String initializeDatabase() {
+        List<PortfolioSection> portfolioSections = psRepository.findAll();
+
+        if (portfolioSections.size() < 6 || !this.checkSections(portfolioSections)) {
+            this.generateDefaultSections();
+            amService.generateDefaultAboutMeData();
+
+            return "Sections initialized";
+        }
+
+        return "Sections already initialized";
     }
 }

@@ -7,6 +7,8 @@ import com.alejoassain.portfolioargprogbe.aboutme.response.AboutMeResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class AboutMeService implements IAboutMeService{
     @Autowired
@@ -46,5 +48,21 @@ public class AboutMeService implements IAboutMeService{
         amRepository.save(am);
 
         return this.buildResponse(am);
+    }
+
+    @Override
+    public void generateDefaultAboutMeData() {
+        Optional<AboutMe> amSectionData = amRepository.findById(1);
+
+        if (amSectionData.isEmpty()) {
+            AboutMe amData =  AboutMe.builder()
+                    .id(1)
+                    .text("Example text")
+                    .profilePicCap("Example profile pic cap")
+                    .profilePicLink("Example profile pic link")
+                    .build();
+
+            amRepository.save(amData);
+        }
     }
 }

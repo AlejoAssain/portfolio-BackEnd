@@ -12,4 +12,5 @@ public interface IPortfolioSectionService {
     public PortfolioSectionsResponse getPortfolioSections();
     public PortfolioSectionResponse getPortfolioSection(String sectionName);
     public PortfolioSectionResponse updatePortfolioSection(String sectionName, PortfolioSectionRequest requestBody);
+    public String initializeDatabase();
 }
